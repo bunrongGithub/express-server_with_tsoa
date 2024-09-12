@@ -70,6 +70,7 @@ export class ItemController extends Controller {
           data: response
         }
       } catch (error) {
+        console.error(`ProductsController - getAllProducts() method error: ${error}`)
         throw error;
       }
     }

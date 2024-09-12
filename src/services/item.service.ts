@@ -38,11 +38,15 @@ class ItemServices{
         try {
             const {page ,limit,filter,sort} = queries;
             const newQueries = {
-                page,limit,filter: filter && JSON.parse(filter),sort: sort && JSON.parse(sort)
+                page,
+                limit,
+                filter: filter && JSON.parse(filter),
+                sort: sort && JSON.parse(sort)
             }
             const result = await itemsRepositories.getAll(newQueries);
             return result;
         } catch (error) {
+            console.error(`ProductService - getAllProducts() method error: ${error}`)
             throw error;
         }
     }

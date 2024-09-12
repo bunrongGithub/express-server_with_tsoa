@@ -8,6 +8,7 @@
 		"responses": {},
 		"schemas": {
 			"IItem": {
+				"description": "Interface to describe a single document",
 				"properties": {
 					"name": {
 						"type": "string"

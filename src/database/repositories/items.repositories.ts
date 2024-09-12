@@ -1,6 +1,6 @@
-import ItemModel, { IItem } from "../models/items.model";
-import { ItemCreateRequest, ItemUpdateRequest } from "../../controllers/types/items-request.type";
-import { ItemGetAllRepoParams, ItemSortParams } from "./types/item-reposity.type";
+import ItemModel, { IItem } from "@/src/database/models/items.model";
+import { ItemCreateRequest, ItemUpdateRequest } from "@/src/controllers/types/items-request.type";
+import { ItemGetAllRepoParams, ItemSortParams } from "@/src/database/repositories/types/item-reposity.type";
 import { SortOrder } from "mongoose";
 class ItemRepository {
     public async createItem(productRequest: ItemCreateRequest): Promise<IItem> {
@@ -64,7 +64,7 @@ class ItemRepository {
                             mongoFilter[key].$gte = filter[key].min;
                         }
                         if (filter[key].max !== undefined) {
-                            mongoFilter[key].$gte = filter[key].max;
+                            mongoFilter[key].$lte = filter[key].max;
                         }
                     } else {
                         mongoFilter[key] = filter[key];
@@ -83,7 +83,7 @@ class ItemRepository {
                 .skip((page -1) * limit)
                 .limit(limit);
             const result = await operation;
-            const totalItems: any = ItemModel.countDocuments(mongoFilter);
+            const totalItems = await ItemModel.countDocuments(mongoFilter);
             return {
                 [ItemModel.collection.collectionName]: result,
                 totalItems,
@@ -91,6 +91,7 @@ class ItemRepository {
                 currentPage: page
             }
         } catch (error) {
+            console.error(`ProductRepository - getAll() method error: ${error}`);
             throw error;
         }
     }

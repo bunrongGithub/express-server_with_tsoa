@@ -1,4 +1,4 @@
-import configs from "../config";
+import configs from "@/src/config";
 import mongoose from "mongoose";
 
 const connection = async () => {

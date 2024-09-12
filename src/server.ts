@@ -1,6 +1,6 @@
-import app from "./app";
-import configs from "./config";
-import connection from "./database/connection";
+import app from "@/src/app";
+import configs from "@/src/config";
+import connection from "@/src/database/connection";
 
 async function run() {
     try {

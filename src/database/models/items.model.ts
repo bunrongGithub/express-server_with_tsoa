@@ -23,7 +23,7 @@ export const itemCreateSchema = Joi.object<IItem>({
         "string.base": "category muse be a string",
         "any.required": "category are require",
     }),
-    price: Joi.string().required().messages({
+    price: Joi.number().required().messages({
         "string.base":"price must be a number",
         "any.required":"price are require"
     }),
