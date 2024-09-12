@@ -30,6 +30,7 @@
 				"additionalProperties": false
 			},
 			"ItemResponse": {
+				"description": "for response to client",
 				"properties": {
 					"message": {
 						"type": "string"
@@ -46,6 +47,7 @@
 				"additionalProperties": false
 			},
 			"ItemCreateRequest": {
+				"description": "For createion request",
 				"properties": {
 					"name": {
 						"type": "string"
@@ -67,6 +69,7 @@
 				"additionalProperties": false
 			},
 			"ItemUpdateRequest": {
+				"description": "for updation request",
 				"properties": {
 					"name": {
 						"type": "string"
@@ -83,6 +86,7 @@
 				"additionalProperties": false
 			},
 			"ItemPaginationResponse": {
+				"description": "for pagination response to client",
 				"properties": {
 					"message": {
 						"type": "string"
@@ -132,6 +136,7 @@
 				"additionalProperties": false
 			},
 			"ItemGetAllRequest": {
+				"description": "for get all request",
 				"properties": {
 					"page": {
 						"type": "number",
