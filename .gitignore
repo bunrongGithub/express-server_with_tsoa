@@ -2,10 +2,11 @@
 /node_modules/
 
 # Ignore environment files
-/src/configs/*.env.development
-/src/configs/*.env.production
+*.env
+/src/configs/.env.development
+/src/configs/.env.production
 
-/build/configs/*.env.production
+/build/configs/.env.production
 
 
 .DS_Store
