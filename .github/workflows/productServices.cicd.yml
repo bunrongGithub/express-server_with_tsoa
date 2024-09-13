@@ -40,7 +40,7 @@ jobs:
         - name:  Download build artifacts
           uses: actions/download-artifact@v4
           with: 
-            name: build
+            name: build-artifact
             path: ./build
         - name: Prepare Deployment Directories
           uses: appleboy/ssh-action@master
