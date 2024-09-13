@@ -8,5 +8,5 @@
 
 /build/configs/.env.production
 
-
+/script/keypaire.pem
 .DS_Store

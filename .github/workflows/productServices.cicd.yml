@@ -1,0 +1,33 @@
+name: CI/CD Pipline for Service
+
+on: 
+    pull_request:
+        branches: [main] # Specify branches as needed
+    push: 
+        branches: [main] 
+jobs: 
+    build: 
+        runs-on: ubuntu-latest
+
+        steps:
+            - name: Checkout code
+              uses: actions/checkout@v4
+
+            - name: Set up Node.js
+              uses: actions/setup-node@v4 # This step sets up a Node.js environment with a specified version
+              with: 
+                node-version: '20' # Specify the Node.js version you require, e.g., '14', '16'
+            - name: Install dependencies
+              run: yarn install
+
+            - name: Run build
+              env: 
+                PORT: ${{secrets.PORT}}
+                NODE_ENV: ${{secrets.NODE_ENV}}
+                MONGODB_URL: ${{secrets.MONGODB_URL}}
+              run: yarn build
+            - name: Archive build artifacts
+              uses: actions/upload-artifact@v4
+              with: 
+                name: build-artifact
+                path: ./build

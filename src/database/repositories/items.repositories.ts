@@ -2,6 +2,7 @@ import ItemModel, { IItem } from "@/src/database/models/items.model";
 import { ItemCreateRequest, ItemUpdateRequest } from "@/src/controllers/types/items-request.type";
 import { ItemGetAllRepoParams, ItemSortParams } from "@/src/database/repositories/types/item-reposity.type";
 import { SortOrder } from "mongoose";
+import { NotFoundError } from "@/src/utils/errors";
 class ItemRepository {
     public async createItem(productRequest: ItemCreateRequest): Promise<IItem> {
         try {
@@ -15,7 +16,7 @@ class ItemRepository {
         try {
             const item = await ItemModel.findById(id);
             if (!item) {
-                throw new Error('Product not found!');
+                throw new NotFoundError('Product not found!');
             }
             return item;
         } catch (error) {
