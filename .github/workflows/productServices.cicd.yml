@@ -95,8 +95,17 @@ jobs:
               # Verify if `yarn` and `pm2` are available
               if ! command -v npm &> /dev/null; then
                 echo "npm not found. Installing Node.js."
-                curl -fsSL https://deb.nodesource.com/setup_20.x | sudo -E bash -
-                sudo apt-get install -y nodejs
+                # Download from the source
+                curl --silent --location https://deb.nodesource.com/setup_0.12 | sudo bash -
+
+                # Installing node directly (latest version)
+                sudo apt-get install --yes nodejs
+
+                # Build tools for npm
+                sudo apt-get install --yes build-essential
+
+                # Install node-gyp
+                sudo npm install -g node-gyp
               fi
 
               # Verify if `yarn` is available and install if missing
