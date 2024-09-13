@@ -50,8 +50,10 @@ jobs:
             key: ${{secrets.SSH_PRIVATE_KEY}}
             port: 22
             script: |
+              set -e
               mkdir -p /home/ubuntu/apps/build
               mkdir -p /home/ubuntu/apps/build/configs
+
         - name: Copy files to server
           uses: appleboy/scp-action@master
           with: 
@@ -70,6 +72,7 @@ jobs:
             key: ${{secrets.SSH_PRIVATE_KEY}}
             port: 22
             script: |
+              set -e
               echo "NODE_ENV=production" > /home/ubuntu/apps/build/configs/.env.production
               echo "PORT=${{ secrets.PORT }}" >> /home/ubuntu/apps/build/configs/.env.production
               echo "MONGODB_URL=${{ secrets.MONGODB_URL}}" >> /home/ubuntu/apps/build/configs/.env.production
@@ -81,6 +84,7 @@ jobs:
             key: ${{ secrets.SSH_PRIVATE_KEY }}
             port: 22
             script: |
+              set -e
               # Load the full user environment for non-interactive shells
               if [ -f /home/ubuntu/.nvm/nvm.sh ]; then
                 source /home/ubuntu/.nvm/nvm.sh
@@ -90,23 +94,22 @@ jobs:
 
               # Verify if `yarn` and `pm2` are available
               if ! command -v yarn &> /dev/null; then
-                echo "Yarn not found. Installing Yarn."
-                npm install --global yarn
+                npm install -g yarn
               fi
 
               if ! command -v pm2 &> /dev/null; then
-                echo "PM2 not found. Installing PM2."
-                npm install pm2 -g
+                npm install -g pm2
               fi
+
               # source /home/ubuntu/.nvm/nvm.sh
               # source /home/ubuntu/.profile
 
               cd /home/ubuntu/apps/build
-              echo install --production
+              echo "Installing dependencies..."
               yarn install --production
 
               # Check if PM2 process is running
-              
+
               # Assume PM2 is used, Replace with other command for other process manager
               # Assume you have script for run start in production and restart in production
               # Check if the PM2 process is running
