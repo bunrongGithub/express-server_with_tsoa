@@ -3,7 +3,6 @@ import configs from "@/src/config";
 import connection from "@/src/database/connection";
 
 
-console.log(process.env.TZ)
 async function run() {
     try {
         await connection().then(() => {
