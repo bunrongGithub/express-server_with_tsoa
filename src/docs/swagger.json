@@ -161,6 +161,9 @@
 	},
 	"info": {
 		"title": "express",
+		"license": {
+			"name": "MIT"
+		},
 		"contact": {}
 	},
 	"paths": {

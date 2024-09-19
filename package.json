@@ -1,6 +1,8 @@
 {
   "name": "express",
   "packageManager": "yarn@1.22.22",
+  "main": "src/server.ts",
+  "license":"MIT",
   "scripts": {
     "tsoa:gen": "tsoa spec && tsoa routes",
     "dev": "yarn tsoa:gen && nodemon src/server.ts",
