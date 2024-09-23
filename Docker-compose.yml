@@ -1,6 +1,6 @@
 version: '3.8'
 services:
-   expree-server:
+  express-server:
     container_name: my-dev-app
     build:
       context: .
@@ -13,3 +13,11 @@ services:
       - DOCKER_ENV=true
     volumes:
       - ./src:/app/src # HOT RELOADING, ANY CHANGE IN SRC FOLDER OUR APP WILL RESTART
+
+  mongo:
+    image: mongo
+    ports:
+      - "27017:27017"
+    environment:
+      MONGO_INITDB_ROOT_USERNAME: root
+      MONGO_INITDB_ROOT_PASSWORD: example
