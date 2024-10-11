@@ -7,9 +7,15 @@
 		"requestBodies": {},
 		"responses": {},
 		"schemas": {
+			"mongoose.Types.ObjectId": {
+				"type": "string"
+			},
 			"IItem": {
 				"description": "Interface to describe a single document",
 				"properties": {
+					"_id": {
+						"$ref": "#/components/schemas/mongoose.Types.ObjectId"
+					},
 					"name": {
 						"type": "string"
 					},
@@ -22,6 +28,7 @@
 					}
 				},
 				"required": [
+					"_id",
 					"name",
 					"category",
 					"price"
@@ -161,6 +168,9 @@
 	},
 	"info": {
 		"title": "express",
+		"license": {
+			"name": "MIT"
+		},
 		"contact": {}
 	},
 	"paths": {

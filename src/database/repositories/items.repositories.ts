@@ -1,8 +1,8 @@
-import ItemModel, { IItem } from "@/src/database/models/items.model";
-import { ItemCreateRequest, ItemUpdateRequest } from "@/src/controllers/types/items-request.type";
-import { ItemGetAllRepoParams, ItemSortParams } from "@/src/database/repositories/types/item-reposity.type";
+import ItemModel, { IItem } from "../models/items.model";
+import { ItemCreateRequest, ItemUpdateRequest } from "../../controllers/types/items-request.type";
+import { ItemGetAllRepoParams, ItemSortParams } from "../../database/repositories/types/item-reposity.type";
 import { SortOrder } from "mongoose";
-import { NotFoundError } from "@/src/utils/errors";
+import { NotFoundError } from "../../utils/errors";
 class ItemRepository {
     public async createItem(productRequest: ItemCreateRequest): Promise<IItem> {
         try {

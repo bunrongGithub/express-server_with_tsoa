@@ -1,18 +1,19 @@
-import express ,{Express} from "express";
+import express from "express";
 import swaggerUi from "swagger-ui-express";
 import { RegisterRoutes } from "./routes/v1/routes";
 import fs from "fs";
 import path from "path";
-import globalErrorHandler from "@/src/middlewares/global-error"
+import globalErrorHandler from "./middlewares/global-error"
 
 const swaggerDocument = JSON.parse(fs.readFileSync(path.join(__dirname, "docs/swagger.json"), 'utf8'));
 // ==================
 // Initialize App Express
 // ==================
-const app: Express = express();
+const app = express();
 // ========================
 // Global Middleware
 // ========================
+
 app.use(express.json());
 
 // ========================

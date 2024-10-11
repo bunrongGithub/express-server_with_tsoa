@@ -1,13 +1,14 @@
 /** Import from tsoa */
-import { Controller, Route, Post, Body, Response, Middlewares, Get, Path, Put, Delete, Queries } from 'tsoa';
+import { Controller, Route, Post, Body, Response, Middlewares, Get, Path, Put, Delete, Queries } from "tsoa";
 /** import items request from type */
-import { ItemCreateRequest, ItemGetAllRequest, ItemUpdateRequest } from '@/src/controllers/types/items-request.type';
+import { ItemCreateRequest, ItemGetAllRequest, ItemUpdateRequest } from '../controllers/types/items-request.type';
 /** import response item to user from type */
-import { ItemPaginationResponse, ItemResponse } from '@/src/controllers/types/user-response.type';
+import { ItemPaginationResponse, ItemResponse } from '../controllers/types/user-response.type';
 /** import services from service */
-import itemService from '@/src/services/item.service';
-import validateRequest from '@/src/middlewares/validate-input';
-import { itemCreateSchema } from '@/src/database/models/items.model';
+import itemService from '../services/item.service';
+import validateRequest from '../middlewares/validate-input';
+import { itemCreateSchema } from '../database/models/items.model';
+import mongoose from "mongoose";
 /** bast route of item */
 @Route("/v1/items")
 export class ItemController extends Controller {
@@ -20,6 +21,7 @@ export class ItemController extends Controller {
       return {
         message: "Successfully",
         data: {
+          _id: new mongoose.Types.ObjectId,
           name: newProduct.name,
           category: newProduct.category,
           price: newProduct.price

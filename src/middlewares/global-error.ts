@@ -1,8 +1,10 @@
 import { NextFunction, Request, Response } from "express";
-import { HTTP_STATUS_CODE } from "@/src/utils/constants/status-code";
-import { APP_ERROR_MESSAGE } from "@/src/utils/app-error-message";
-import { ApplicationError } from "@/src/utils/errors";
+import { HTTP_STATUS_CODE } from "../utils/constants/status-code";
+import { APP_ERROR_MESSAGE } from "../utils/app-error-message";
+import { ApplicationError } from "../utils/errors";
 function globalErrorHandler(error: unknown, _req: Request, res: Response, _next: NextFunction) {
+    console.log(error);
+    
     if (error instanceof ApplicationError) {
         const status = error.status;
         const message = error.message;

@@ -1,23 +1,32 @@
-version: '3.8'
+version: '3.8' # Specifies the version of the Docker Compose file format
+
 services:
   express-server:
-    container_name: my-dev-app
+    # Defines the service for the Express server
+    container_name: my-dev-app # Name of the container for easier identification
     build:
-      context: .
-      dockerfile: Dockerfile.dev
-    restart: always
+      context: . # Context path for the build process (current directory)
+      dockerfile: Dockerfile.dev # Specifies the Dockerfile to use for building the image
+    restart: always # Automatically restart the container if it stops
     ports:
-      - 4000:3000
-    env_file: ./src/configs/.env.development
+      - 4000:3000 # Maps port 3000 in the container to port 4000 on the host
+    env_file: ./src/configs/.env.development # Load environment variables from the specified file
     environment:
-      - DOCKER_ENV=true
+      - DOCKER_ENV=true # Sets an environment variable indicating that the app is running in Docker
     volumes:
-      - ./src:/app/src # HOT RELOADING, ANY CHANGE IN SRC FOLDER OUR APP WILL RESTART
+      - ./src:/app/src # Mounts the local src directory to /app/src in the container for hot reloading
 
-  mongo:
-    image: mongo
+  mongo_db:
+    # Defines the service for the MongoDB database
+    image: mongo # Uses the official MongoDB image from Docker Hub
     ports:
-      - "27017:27017"
+      - "27017:27017" # Maps port 27017 in the container to port 27017 on the host
     environment:
-      MONGO_INITDB_ROOT_USERNAME: root
-      MONGO_INITDB_ROOT_PASSWORD: example
+      MONGO_INITDB_ROOT_USERNAME: rong # Sets the root username for MongoDB
+      MONGO_INITDB_ROOT_PASSWORD: 12345678 # Sets the root password for MongoDB
+      MONGO_INITDB_ROOT_DATABASE: demoDocker # Specifies the initial database to create
+    volumes:
+      - mongodb_data:/data/db # Persists MongoDB data using a named volume
+
+volumes:
+  mongodb_data: # Defines a named volume for MongoDB data persistence

@@ -1,11 +1,12 @@
-import app from "@/src/app";
-import configs from "@/src/config";
-import connection from "@/src/database/connection";
+import app from "./app";
+import configs from "./config";
+import connection from "./database/connection";
+
 async function run() {
     try {
         await connection().then(() => {
             app.listen(configs.port, () => {
-                console.log('hello world')
+               // console.log('hello world')
                 console.log(`User Service running on Port: ${configs.port}`);
             })
         })

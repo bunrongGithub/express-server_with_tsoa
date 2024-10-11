@@ -7,9 +7,15 @@
 		"requestBodies": {},
 		"responses": {},
 		"schemas": {
+			"mongoose.Types.ObjectId": {
+				"type": "string"
+			},
 			"IItem": {
 				"description": "Interface to describe a single document",
 				"properties": {
+					"_id": {
+						"$ref": "#/components/schemas/mongoose.Types.ObjectId"
+					},
 					"name": {
 						"type": "string"
 					},
@@ -22,6 +28,7 @@
 					}
 				},
 				"required": [
+					"_id",
 					"name",
 					"category",
 					"price"
@@ -153,6 +160,171 @@
 						"type": "string"
 					}
 				},
+				"type": "object",
+				"additionalProperties": false
+			},
+			"DeliveryMediumType": {
+				"type": "string",
+				"enum": [
+					"EMAIL",
+					"SMS"
+				]
+			},
+			"CodeDeliveryDetailsType": {
+				"description": "<p>The delivery details for an email or SMS message that Amazon Cognito sent for authentication or\n            verification.</p>",
+				"properties": {
+					"Destination": {
+						"type": "string",
+						"description": "<p>The email address or phone number destination where Amazon Cognito sent the code.</p>"
+					},
+					"DeliveryMedium": {
+						"$ref": "#/components/schemas/DeliveryMediumType",
+						"description": "<p>The method that Amazon Cognito used to send the code.</p>"
+					},
+					"AttributeName": {
+						"type": "string",
+						"description": "<p>The name of the attribute that Amazon Cognito verifies with the code.</p>"
+					}
+				},
+				"type": "object",
+				"additionalProperties": false
+			},
+			"ResponseMetadata": {
+				"properties": {
+					"httpStatusCode": {
+						"type": "number",
+						"format": "double",
+						"description": "The status code of the last HTTP response received for this operation."
+					},
+					"requestId": {
+						"type": "string",
+						"description": "A unique identifier for the last request sent for this operation. Often\nrequested by AWS service teams to aid in debugging."
+					},
+					"extendedRequestId": {
+						"type": "string",
+						"description": "A secondary identifier for the last request sent. Used for debugging."
+					},
+					"cfId": {
+						"type": "string",
+						"description": "A tertiary identifier for the last request sent. Used for debugging."
+					},
+					"attempts": {
+						"type": "number",
+						"format": "double",
+						"description": "The number of times this operation was attempted."
+					},
+					"totalRetryDelay": {
+						"type": "number",
+						"format": "double",
+						"description": "The total amount of time (in milliseconds) that was spent waiting between\nretry attempts."
+					}
+				},
+				"type": "object",
+				"additionalProperties": false
+			},
+			"SignUpCommandOutput": {
+				"properties": {
+					"UserConfirmed": {
+						"type": "boolean",
+						"description": "<p>A response from the server indicating that a user registration has been\n            confirmed.</p>"
+					},
+					"CodeDeliveryDetails": {
+						"$ref": "#/components/schemas/CodeDeliveryDetailsType",
+						"description": "<p>The code delivery details returned by the server response to the user registration\n            request.</p>"
+					},
+					"UserSub": {
+						"type": "string",
+						"description": "<p>The 128-bit ID of the authenticated user. This isn't the same as\n            <code>username</code>.</p>"
+					},
+					"$metadata": {
+						"$ref": "#/components/schemas/ResponseMetadata",
+						"description": "Metadata pertaining to this request."
+					}
+				},
+				"required": [
+					"$metadata"
+				],
+				"type": "object",
+				"additionalProperties": false
+			},
+			"SignUpRequest": {
+				"properties": {
+					"phone": {
+						"type": "string"
+					},
+					"password": {
+						"type": "string"
+					},
+					"email": {
+						"type": "string"
+					}
+				},
+				"required": [
+					"phone",
+					"password",
+					"email"
+				],
+				"type": "object",
+				"additionalProperties": false
+			},
+			"ConfirmSignUpCommandOutput": {
+				"properties": {
+					"$metadata": {
+						"$ref": "#/components/schemas/ResponseMetadata",
+						"description": "Metadata pertaining to this request."
+					}
+				},
+				"required": [
+					"$metadata"
+				],
+				"type": "object",
+				"additionalProperties": false
+			},
+			"ConfirmSignUpRequest": {
+				"properties": {
+					"email": {
+						"type": "string"
+					},
+					"confirmationCode": {
+						"type": "string"
+					}
+				},
+				"required": [
+					"email",
+					"confirmationCode"
+				],
+				"type": "object",
+				"additionalProperties": false
+			},
+			"IAuth": {
+				"properties": {
+					"email": {
+						"type": "string"
+					},
+					"email_verified": {
+						"type": "string"
+					}
+				},
+				"required": [
+					"email",
+					"email_verified"
+				],
+				"type": "object",
+				"additionalProperties": false
+			},
+			"SignInRequest": {
+				"properties": {
+					"password": {
+						"type": "string"
+					},
+					"email": {
+						"type": "string"
+					}
+				},
+				"required": [
+					"password",
+					"email"
+				],
 				"type": "object",
 				"additionalProperties": false
 			}
@@ -326,6 +498,215 @@
 					{
 						"in": "path",
 						"name": "id",
+						"required": true,
+						"schema": {
+							"type": "string"
+						}
+					}
+				]
+			}
+		},
+		"/v1/auth/sigupv2": {
+			"post": {
+				"operationId": "SignUpV2",
+				"responses": {
+					"200": {
+						"description": "Ok",
+						"content": {
+							"application/json": {
+								"schema": {
+									"$ref": "#/components/schemas/SignUpCommandOutput"
+								}
+							}
+						}
+					}
+				},
+				"security": [],
+				"parameters": [],
+				"requestBody": {
+					"required": true,
+					"content": {
+						"application/json": {
+							"schema": {
+								"$ref": "#/components/schemas/SignUpRequest"
+							}
+						}
+					}
+				}
+			}
+		},
+		"/v1/auth/confirm": {
+			"post": {
+				"operationId": "ConfirmSignUpV2",
+				"responses": {
+					"200": {
+						"description": "Ok",
+						"content": {
+							"application/json": {
+								"schema": {
+									"anyOf": [
+										{
+											"$ref": "#/components/schemas/ConfirmSignUpCommandOutput"
+										},
+										{
+											"properties": {
+												"message": {}
+											},
+											"required": [
+												"message"
+											],
+											"type": "object"
+										}
+									]
+								}
+							}
+						}
+					}
+				},
+				"security": [],
+				"parameters": [],
+				"requestBody": {
+					"required": true,
+					"content": {
+						"application/json": {
+							"schema": {
+								"$ref": "#/components/schemas/ConfirmSignUpRequest"
+							}
+						}
+					}
+				}
+			}
+		},
+		"/v1/auth/signinv2": {
+			"post": {
+				"operationId": "SignInV2",
+				"responses": {
+					"200": {
+						"description": "Ok",
+						"content": {
+							"application/json": {
+								"schema": {
+									"anyOf": [
+										{
+											"$ref": "#/components/schemas/IAuth"
+										},
+										{
+											"properties": {
+												"message": {}
+											},
+											"required": [
+												"message"
+											],
+											"type": "object"
+										}
+									]
+								}
+							}
+						}
+					}
+				},
+				"security": [],
+				"parameters": [],
+				"requestBody": {
+					"required": true,
+					"content": {
+						"application/json": {
+							"schema": {
+								"$ref": "#/components/schemas/SignInRequest"
+							}
+						}
+					}
+				}
+			}
+		},
+		"/v1/auth/google/login": {
+			"get": {
+				"operationId": "LoginWithGoogle",
+				"responses": {
+					"200": {
+						"description": "Ok",
+						"content": {
+							"application/json": {
+								"schema": {
+									"properties": {
+										"data": {},
+										"message": {
+											"type": "string"
+										},
+										"status": {
+											"type": "number",
+											"format": "double"
+										}
+									},
+									"required": [
+										"data",
+										"message",
+										"status"
+									],
+									"type": "object"
+								}
+							}
+						}
+					}
+				},
+				"description": "Login with Google using Cognito OAuth2",
+				"security": [],
+				"parameters": [
+					{
+						"description": "A unique state string to prevent CSRF attacks",
+						"in": "query",
+						"name": "state",
+						"required": true,
+						"schema": {
+							"type": "string"
+						}
+					}
+				]
+			}
+		},
+		"/v1/auth/callback": {
+			"get": {
+				"operationId": "CognitoCallback",
+				"responses": {
+					"200": {
+						"description": "Ok",
+						"content": {
+							"application/json": {
+								"schema": {
+									"properties": {
+										"data": {},
+										"message": {
+											"type": "string"
+										},
+										"status": {
+											"type": "number",
+											"format": "double"
+										}
+									},
+									"required": [
+										"data",
+										"message",
+										"status"
+									],
+									"type": "object"
+								}
+							}
+						}
+					}
+				},
+				"security": [],
+				"parameters": [
+					{
+						"in": "query",
+						"name": "code",
+						"required": true,
+						"schema": {
+							"type": "string"
+						}
+					},
+					{
+						"in": "query",
+						"name": "state",
 						"required": true,
 						"schema": {
 							"type": "string"

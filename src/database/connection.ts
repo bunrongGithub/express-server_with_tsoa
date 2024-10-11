@@ -1,7 +1,8 @@
-import configs from "@/src/config";
+import configs from "../config";
 import mongoose from "mongoose";
 
 const connection = async () => {
+    console.log(`${configs.mongodbUrl}`);
     try {
         await mongoose.connect(`${configs.mongodbUrl}`);
         console.log(`connection successfully!..`);

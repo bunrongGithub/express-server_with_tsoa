@@ -16,9 +16,7 @@
         "alwaysStrict": true,
         "pretty": true,
         "paths": {
-            "@/*": [
-                "./*"
-            ]
+            "@/*": ["./"],
         }
     },
     "include": [
@@ -26,8 +24,7 @@
         "src/config.ts"
     ],
     "exclude": [
-        "node_modules",
-        "**/*.spec.ts"
+        "node_modules","**/*.spec.ts"
     ],
     "ts-node": {
         "require": [

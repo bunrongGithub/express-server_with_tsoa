@@ -1,6 +1,6 @@
-import { ItemCreateRequest, ItemGetAllRequest, ItemUpdateRequest } from "@/src/controllers/types/items-request.type";
-import { IItem } from "@/src/database/models/items.model";
-import itemsRepositories from "@/src/database/repositories/items.repositories";
+import { ItemCreateRequest, ItemGetAllRequest, ItemUpdateRequest } from "../controllers/types/items-request.type";
+import { IItem } from "../database/models/items.model";
+import itemsRepositories from "../database/repositories/items.repositories";
 class ItemServices{
     public async createItems(itemRequest: ItemCreateRequest): Promise<IItem>{
         try {
