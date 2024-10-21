@@ -458,6 +458,7 @@ export function RegisterRoutes(app: Router) {
 
             async function AuthGoogleController_cognitoCallback(request: ExRequest, response: ExResponse, next: any) {
             const args: Record<string, TsoaRoute.ParameterSchema> = {
+                    request: {"in":"request","name":"request","required":true,"dataType":"object"},
                     code: {"in":"query","name":"code","required":true,"dataType":"string"},
                     state: {"in":"query","name":"state","required":true,"dataType":"string"},
             };
@@ -472,6 +473,36 @@ export function RegisterRoutes(app: Router) {
 
               await templateService.apiHandler({
                 methodName: 'cognitoCallback',
+                controller,
+                response,
+                next,
+                validatedArgs,
+                successStatus: undefined,
+              });
+            } catch (err) {
+                return next(err);
+            }
+        });
+        // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
+        app.get('/v1/auth/profile',
+            ...(fetchMiddlewares<RequestHandler>(AuthGoogleController)),
+            ...(fetchMiddlewares<RequestHandler>(AuthGoogleController.prototype.getAccessUserProfile)),
+
+            async function AuthGoogleController_getAccessUserProfile(request: ExRequest, response: ExResponse, next: any) {
+            const args: Record<string, TsoaRoute.ParameterSchema> = {
+                    accessToken: {"in":"query","name":"accessToken","required":true,"dataType":"string"},
+            };
+
+            // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
+
+            let validatedArgs: any[] = [];
+            try {
+                validatedArgs = templateService.getValidatedArgs({ args, request, response });
+
+                const controller = new AuthGoogleController();
+
+              await templateService.apiHandler({
+                methodName: 'getAccessUserProfile',
                 controller,
                 response,
                 next,
