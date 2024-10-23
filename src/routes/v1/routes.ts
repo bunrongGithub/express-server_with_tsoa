@@ -146,11 +146,13 @@ const models: TsoaRoute.Models = {
         "additionalProperties": false,
     },
     // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
-    "IAuth": {
+    "SigInResponse": {
         "dataType": "refObject",
         "properties": {
             "email": {"dataType":"string","required":true},
-            "email_verified": {"dataType":"string","required":true},
+            "accessToken": {"dataType":"string","required":true},
+            "refreshToken": {"dataType":"string","required":true},
+            "idToken": {"dataType":"string","required":true},
         },
         "additionalProperties": false,
     },
@@ -399,6 +401,7 @@ export function RegisterRoutes(app: Router) {
             async function AuthController_signInV2(request: ExRequest, response: ExResponse, next: any) {
             const args: Record<string, TsoaRoute.ParameterSchema> = {
                     requestBody: {"in":"body","name":"requestBody","required":true,"ref":"SignInRequest"},
+                    req: {"in":"request","name":"req","required":true,"dataType":"object"},
             };
 
             // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa

@@ -1,17 +1,16 @@
 import configs from "../config";
 import { CognitoClientHandlers } from "../cognitoClient"
-import { AuthRepositories } from "../database/repositories/auth.repositories";
+// import { AuthRepositories } from "../database/repositories/auth.repositories";
 import { ConfirmSignUpCommandInput, GetUserCommandInput, GetUserCommandOutput, InitiateAuthCommandInput, SignUpCommandInput } from "@aws-sdk/client-cognito-identity-provider";
 import { createHmac } from "crypto";
-import { IAuth } from "../database/models/auth.model";
-import { IUserAuthSignUpRequest } from "../database/repositories/types/auth-repositoies.type";
+import { SigInResponse } from "../controllers/types/auth-request.type";
 
 export class AuthService {
-    private authRepository: AuthRepositories;
+    //private authRepository: AuthRepositories;
     private cognitoHandler: CognitoClientHandlers;
     constructor() {
         this.cognitoHandler = new CognitoClientHandlers(configs.cognitoRegion)
-        this.authRepository = new AuthRepositories();
+        // this.authRepository = new AuthRepositories();
     }
     private calculateSecretHash(username: string): string {
         return createHmac("sha256", configs.cognitoClientSecret!)
@@ -64,60 +63,41 @@ export class AuthService {
         }
     }
     // Sign-In Method with Existence Check
-    public async signInV2(email: string, password: string): Promise<IAuth | null> {
+    public async signInV2(emailRequest: string, password: string): Promise<SigInResponse | undefined> {
         try {
             // Step 1: Initiate Authentication with Cognito
             const params: InitiateAuthCommandInput = {
                 AuthFlow: "USER_PASSWORD_AUTH",
                 ClientId: configs.cognitoClientId,
                 AuthParameters: {
-                    USERNAME: email,
+                    USERNAME: emailRequest,
                     PASSWORD: password,
-                    SECRET_HASH: this.calculateSecretHash(email),
+                    SECRET_HASH: this.calculateSecretHash(emailRequest),
                 }
             };
 
             const cognitoResponse = await this.cognitoHandler.signInV2(params);
             const accessToken = cognitoResponse.AuthenticationResult?.AccessToken;
+            const tokenId = cognitoResponse.AuthenticationResult?.IdToken;
+            const refreshToken = cognitoResponse.AuthenticationResult?.RefreshToken;
 
             // Step 2: Get user data from Cognito using the AccessToken
             const userdata = await this.getUserData(accessToken);
+            // console.log("User Data: ", userdata);
             const userAtt = userdata?.UserAttributes || [];
-
-            // Step 3: Map Cognito attributes to IAuth structure
-            const authData: Partial<IAuth> = {};
-            for (const user of userAtt) {
-                const { Name, Value } = user;
-                switch (Name) {
-                    case 'email':
-                        authData.email = Value;
-                        break;
-                    case 'email_verified':
-                        authData.email_verified = Value;
-                        break;
-                    default:
-                        break;
+            const result = userAtt.reduce((acc, { Name, Value }) => {
+                if (Name && Value !== undefined) {
+                    acc[Name] = Value;
                 }
-            }
-
-            // Step 4: Check if the user already exists in the database by email
-            const existingUser = await this.authRepository.findUserByEmail(authData.email);
-
-            // If user exists, return the existing user data
-            if (existingUser) {
-                console.log('User already exists, returning existing user data.');
-                return existingUser;
-            }
-
-            // If user does not exist, create a new user in the database
-            if (authData.email && authData.email_verified) {
-                const newUser = await this.authRepository.registerUserIsSignIn(authData as IUserAuthSignUpRequest);
-                console.log('New user registered successfully:', newUser);
-                return newUser;
-            }
-
-            console.error('Missing required fields in authData:', authData);
-            return null;
+                return acc;
+            }, {} as Record<string, string>);
+            const {email} = result;
+            return {
+                accessToken: accessToken!,
+                idToken: tokenId!,
+                refreshToken: refreshToken!,
+                email: email,
+            };
         } catch (error) {
             console.error('Error during sign-in process:', error);
             throw error;

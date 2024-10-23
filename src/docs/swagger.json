@@ -296,18 +296,26 @@
 				"type": "object",
 				"additionalProperties": false
 			},
-			"IAuth": {
+			"SigInResponse": {
 				"properties": {
 					"email": {
 						"type": "string"
 					},
-					"email_verified": {
+					"accessToken": {
+						"type": "string"
+					},
+					"refreshToken": {
+						"type": "string"
+					},
+					"idToken": {
 						"type": "string"
 					}
 				},
 				"required": [
 					"email",
-					"email_verified"
+					"accessToken",
+					"refreshToken",
+					"idToken"
 				],
 				"type": "object",
 				"additionalProperties": false
@@ -586,20 +594,7 @@
 						"content": {
 							"application/json": {
 								"schema": {
-									"anyOf": [
-										{
-											"$ref": "#/components/schemas/IAuth"
-										},
-										{
-											"properties": {
-												"message": {}
-											},
-											"required": [
-												"message"
-											],
-											"type": "object"
-										}
-									]
+									"$ref": "#/components/schemas/SigInResponse"
 								}
 							}
 						}
